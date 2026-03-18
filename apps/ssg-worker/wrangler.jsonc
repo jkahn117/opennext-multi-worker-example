@@ -1,0 +1,22 @@
+{
+  "name": "opennext-ssg",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-03-18",
+  "compatibility_flags": ["nodejs_compat", "allow_importable_env"],
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "opennext-ssg-cache"
+    }
+  ],
+  "vars": {
+    "NODE_ENV": "production"
+  },
+  "assets": {
+    "directory": "./.open-next/assets",
+    "binding": "ASSETS"
+  },
+  "dev": {
+    "port": 8789
+  }
+}

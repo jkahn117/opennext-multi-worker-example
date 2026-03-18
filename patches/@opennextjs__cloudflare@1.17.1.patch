@@ -1,0 +1,31 @@
+diff --git a/dist/api/overrides/internal.js b/dist/api/overrides/internal.js
+index b69c6d5d8c6492a6f165d506d608211c427a7765..1243fff3d72f540199d24e2597bcdca45dafea50 100644
+--- a/dist/api/overrides/internal.js
++++ b/dist/api/overrides/internal.js
+@@ -1,6 +1,16 @@
+-import { createHash } from "node:crypto";
+ import { error } from "@opennextjs/aws/adapters/logger.js";
+ import { getCloudflareContext } from "../cloudflare-context.js";
++
++// Use a simple DJB2-based hash instead of node:crypto (not available in Workers)
++// This is sufficient for cache key generation (not used for security)
++function simpleHash(str) {
++    let hash = 5381;
++    for (let i = 0; i < str.length; i++) {
++        hash = ((hash << 5) + hash + str.charCodeAt(i)) >>> 0;
++    }
++    return hash.toString(16).padStart(8, '0');
++}
++
+ export const debugCache = (name, ...args) => {
+     if (process.env.NEXT_PRIVATE_DEBUG_CACHE) {
+         console.log(`[${name}] `, ...args);
+@@ -10,7 +20,7 @@ export const FALLBACK_BUILD_ID = "no-build-id";
+ export const DEFAULT_PREFIX = "incremental-cache";
+ export function computeCacheKey(key, options) {
+     const { cacheType = "cache", prefix = DEFAULT_PREFIX, buildId = FALLBACK_BUILD_ID } = options;
+-    const hash = createHash("sha256").update(key).digest("hex");
++    const hash = simpleHash(key);
+     return `${prefix}/${buildId}/${hash}.${cacheType}`.replace(/\/+/g, "/");
+ }
+ export function isPurgeCacheEnabled() {

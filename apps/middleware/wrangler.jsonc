@@ -1,0 +1,27 @@
+{
+  "name": "opennext-middleware",
+  "main": "dist/index.js",
+  "compatibility_date": "2026-03-18",
+  "compatibility_flags": ["nodejs_compat", "allow_importable_env"],
+  "assets": {
+    "directory": "./.assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "SSR_WORKER",
+      "service": "opennext-ssr"
+    },
+    {
+      "binding": "SSG_WORKER",
+      "service": "opennext-ssg"
+    }
+  ],
+  "vars": {
+    "SSR_VERSION_ID": "",
+    "SSG_VERSION_ID": ""
+  },
+  "dev": {
+    "port": 8790
+  }
+}

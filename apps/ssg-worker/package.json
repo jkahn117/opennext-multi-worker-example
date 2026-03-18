@@ -1,0 +1,27 @@
+{
+  "name": "@opennext-shop/ssg-worker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "build:cloudflare": "opennextjs-cloudflare build",
+    "dev": "npm run build && npm run build:cloudflare && wrangler dev --config wrangler.jsonc --local",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf .next .open-next"
+  },
+  "dependencies": {
+    "@opennext-shop/shared-types": "workspace:*",
+    "next": "^16.1.7",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@opennextjs/cloudflare": "^1.17.1",
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.75.0"
+  }
+}

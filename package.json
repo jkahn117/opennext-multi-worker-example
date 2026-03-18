@@ -1,0 +1,26 @@
+{
+  "name": "opennext-multi-worker",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Multi-worker OpenNext project with Cloudflare adapter",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run build:cloudflare && ./scripts/merge-assets.sh && wrangler dev -c apps/middleware/wrangler.jsonc -c apps/ssr-worker/wrangler.jsonc -c apps/ssg-worker/wrangler.jsonc --local",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "turbo": "^2.8.17",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@opennextjs/cloudflare@1.17.1": "patches/@opennextjs__cloudflare@1.17.1.patch"
+    }
+  }
+}
