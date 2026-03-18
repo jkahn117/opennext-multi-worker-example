@@ -6,11 +6,16 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run build:cloudflare && ./scripts/merge-assets.sh && wrangler dev -c apps/middleware/wrangler.jsonc -c apps/ssr-worker/wrangler.jsonc -c apps/ssg-worker/wrangler.jsonc --local",
+    "deploy": "tsx scripts/deploy.ts",
+    "deploy:init": "tsx scripts/deploy.ts --init",
+    "deploy:dry-run": "tsx scripts/deploy.ts --dry-run",
+    "deploy:status": "wrangler deployments list --name opennext-middleware && wrangler deployments list --name opennext-ssr && wrangler deployments list --name opennext-ssg",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
+    "tsx": "^4.21.0",
     "turbo": "^2.8.17",
     "typescript": "^5.9.3"
   },

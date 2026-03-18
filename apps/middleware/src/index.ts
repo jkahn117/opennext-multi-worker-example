@@ -15,7 +15,7 @@ export default class MiddlewareWorker extends WorkerEntrypoint<Env> {
       if (this.isSSGRoute(pathname)) {
         targetWorker = this.env.SSG_WORKER;
         versionId = this.env.SSG_VERSION_ID;
-        workerName = 'ssg';
+        workerName = 'opennext-ssg';
         console.log(`[Middleware] Routing to SSG Worker`);
       } else if (pathname.startsWith('/_next/')) {
         // Static assets served directly from middleware's merged ASSETS binding
@@ -24,7 +24,7 @@ export default class MiddlewareWorker extends WorkerEntrypoint<Env> {
         // Everything else (API routes, /products, /cart, /checkout, /account, etc.)
         targetWorker = this.env.SSR_WORKER;
         versionId = this.env.SSR_VERSION_ID;
-        workerName = 'ssr';
+        workerName = 'opennext-ssr';
         console.log(`[Middleware] Routing to SSR Worker`);
       }
 
