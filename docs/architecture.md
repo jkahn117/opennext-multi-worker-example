@@ -143,7 +143,7 @@ export default defineCloudflareConfig({
 });
 ```
 
-The `node:crypto` compatibility issue (OpenNext imports it for cache key hashing, but Workers don't support it) is fixed via `pnpm patch` -- see `patches/@opennextjs__cloudflare@1.17.1.patch`.
+The `nodejs_compat` compatibility flag (enabled in all worker configs) provides Node.js built-in modules like `node:crypto` that OpenNext requires for cache key hashing.
 
 ## Shared Types
 

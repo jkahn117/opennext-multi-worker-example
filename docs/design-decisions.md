@@ -15,7 +15,9 @@ Documenting the "why" behind key architectural choices, including alternatives c
 - **Single worker (Option A):** Simplest, but loses all the above benefits. Doesn't demonstrate multi-worker patterns.
 - **Four workers (original plan):** Middleware + API + SSR + SSG. Dropped because API routes and SSR pages share data (cart store, product catalog). Keeping them separate forced HTTP round-trips from server components to the API worker. Merging them into one Next.js app is the natural pattern.
 
-**Trade-off:** Two separate `next build` runs (~20s total). Accepted because deployment independence is more valuable than build speed.
+**Trade-offs:**
+- Two separate `next build` runs (~20s total). Accepted because deployment independence is more valuable than build speed.
+- No client-side navigation between workers. Clicking a link from an SSG page (`/about`) to an SSR page (`/cart`) triggers a full browser reload -- Next.js can't do SPA-style transitions across separate apps. If seamless navigation across all routes is critical, use a single Next.js app instead.
 
 ## 2. Plain Worker for middleware, not Next.js
 
@@ -67,19 +69,7 @@ Documenting the "why" behind key architectural choices, including alternatives c
 
 **Trade-off:** No web UI for deployment management. You use CLI commands or the Cloudflare dashboard. Acceptable because deployments are developer-facing operations, not user-facing.
 
-## 6. `pnpm patch` for node:crypto fix
-
-**Decision:** Use `pnpm patch` to fix OpenNext's `node:crypto` import, replacing the previous `postinstall` shell script.
-
-**Why:**
-- `pnpm patch` is version-controlled (the `.patch` file is committed).
-- It survives `pnpm install`, `node_modules` deletion, and CI environments.
-- It's explicit -- you can read the diff in `patches/@opennextjs__cloudflare@1.17.1.patch`.
-- The postinstall script was fragile: it searched `node_modules` with `find`, could silently fail, and didn't survive `pnpm install --frozen-lockfile`.
-
-**The actual fix:** Replaced `import { createHash } from "node:crypto"` with a DJB2 hash function. This is used for cache key generation, not security, so a non-cryptographic hash is sufficient.
-
-## 7. `wrangler dev -c ... -c ...` for local development
+## 6. `wrangler dev -c ... -c ...` for local development
 
 **Decision:** Use Wrangler's multi-config dev mode instead of running separate `wrangler dev` processes.
 

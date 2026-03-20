@@ -22,10 +22,5 @@
   "packageManager": "pnpm@9.15.0",
   "engines": {
     "node": ">=20.0.0"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@opennextjs/cloudflare@1.17.1": "patches/@opennextjs__cloudflare@1.17.1.patch"
-    }
   }
 }

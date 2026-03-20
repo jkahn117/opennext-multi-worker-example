@@ -59,8 +59,6 @@ opennext-multi-worker/
   scripts/
     deploy.ts             # Gradual deployment orchestration
     merge-assets.sh       # Merges static assets for middleware
-  patches/
-    @opennextjs__cloudflare@1.17.1.patch  # Fixes node:crypto in Workers
 ```
 
 ## Prerequisites
@@ -72,7 +70,7 @@ opennext-multi-worker/
 ## Quick Start
 
 ```bash
-# Install dependencies (also applies the OpenNext crypto patch)
+# Install dependencies
 pnpm install
 
 # Build and run all workers locally
@@ -107,11 +105,13 @@ Open http://localhost:8790 to see the app.
 
 **Why 3 workers instead of 1?** Independent scaling and deployment. SSG pages change rarely and can be cached aggressively. SSR pages and API routes change frequently and need instant deployments. The middleware is the stable routing layer.
 
+**What's the tradeoff?** Separate Next.js apps mean no client-side navigation between SSG and SSR pages. Clicking a link from `/about` (SSG) to `/cart` (SSR) triggers a full page reload. If seamless SPA navigation across all routes is critical, use a single Next.js app instead.
+
 **Why not the OpenNext `functions` split?** That feature splits routes within a single Next.js app (AWS Lambda concept). We use fully independent Next.js apps connected via Cloudflare Service Bindings.
 
 **Why merge static assets into middleware?** Each Next.js app generates its own chunk hashes. Service binding requests bypass the Wrangler assets layer, so the middleware serves all static assets directly from a merged directory.
 
-**Why `pnpm patch` instead of a postinstall script?** The OpenNext adapter imports `node:crypto` which isn't available in Workers. `pnpm patch` is version-controlled, survives installs, and doesn't silently break.
+**Why `nodejs_compat` in all workers?** The OpenNext adapter and many npm packages require Node.js built-in modules. The `nodejs_compat` compatibility flag enables these in Workers.
 
 ## Adding a New Worker
 

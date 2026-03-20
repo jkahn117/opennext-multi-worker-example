@@ -101,16 +101,6 @@ TypeScript interfaces shared across workers. Compiled to JS by `tsc`.
 
 ## Common Issues
 
-### `node:crypto` error during OpenNext build
-
-Fixed by `pnpm patch`. The patch replaces `node:crypto` import in OpenNext's `internal.js` with a DJB2 hash function. If you upgrade `@opennextjs/cloudflare`, you may need to re-create the patch:
-
-```bash
-pnpm patch @opennextjs/cloudflare@<new-version>
-# Edit the file, then:
-pnpm patch-commit '<path-shown-by-pnpm>'
-```
-
 ### Static asset 404s
 
 If you see 404s for `/_next/static/chunks/*.js`, the merged assets directory is stale. Re-run `pnpm run dev` which rebuilds and re-merges.
